@@ -1,0 +1,19 @@
+{
+  "name": "backend-module",
+  "version": "1.0.0",
+  "description": "to setup a professional backend project",
+  "keywords": [
+    "javascript",
+    "backend"
+  ],
+  "license": "ISC",
+  "author": "manav khare",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
