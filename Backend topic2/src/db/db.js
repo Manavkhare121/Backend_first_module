@@ -14,3 +14,6 @@ const connectDB = async () => {
   }
 };
 export default connectDB;
+//this database is completed by async so there is promise is also came here which means when you completed the database there is a promise also came
+
+
