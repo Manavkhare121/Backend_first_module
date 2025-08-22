@@ -1,10 +1,10 @@
 import { json } from "express"
 const asyncHandler=(requestHandler)=>{
-    (req,res,next)=>{
+    return (req,res,next)=>{
         Promise.resolve(requestHandler(req,res,next)).catch((err)=>next(err))
     }
 }
-export  default asyncHandler;//asynchandler is higher order function which can pass as parameter and also as a return
+export  {asyncHandler};//asynchandler is higher order function which can pass as parameter and also as a return
 
 
 
