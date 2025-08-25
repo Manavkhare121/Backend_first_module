@@ -53,7 +53,7 @@ const userSchema = new Schema(
 // arrow function is not used here as we know that in javascript  arrow function doesnot have 'this ' it doesnot know about the context
 userSchema.pre("save",async function(next) {  // 'pre' is hook of a middleware which having a all access of the object
     if(!this.isModified("password")) return next()
-    this.password=bcrypt.hash(this.password,10)
+    this.password= await bcrypt.hash(this.password,10)
     next();
     
 })
