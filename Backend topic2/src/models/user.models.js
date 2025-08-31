@@ -18,7 +18,7 @@ const userSchema = new Schema(
       lowercase: true,
       trim: true,
     },
-    fullname: {
+    fullName: {
       type: String,
       required: true,
       trim: true,
@@ -59,9 +59,10 @@ userSchema.pre("save",async function(next) {  // 'pre' is hook of a middleware w
 })
 
 //'methods' also have access of there object and also it used to check the password from user is correct or not
-userSchema.methods.isPasswordCorrect= async function(password){ 
-    bcrypt.compare(password,this.password)
+userSchema.methods.isPasswordCorrect = async function(password) { 
+    return await bcrypt.compare(password, this.password);
 }
+
 
 userSchema.methods.generateAccessToken=function(){
     return jwt.sign(
@@ -69,10 +70,10 @@ userSchema.methods.generateAccessToken=function(){
             _id:this._id,
             email:this.email,
             username:this.username,
-            fullname:this.fullname
+            fullName:this.fullName
         },
         process.env.ACCESS_TOKEN_SECRET,{
-            expressIN:process.env.ACCESS_TOKEN_EXPIRY
+             expiresIn:process.env.ACCESS_TOKEN_EXPIRY
         }
     )
 }
@@ -85,7 +86,7 @@ userSchema.methods.generateRefreshToken=function(){
             _id:this._id,
         },
         process.env.REFRESH_TOKEN_SECRET,{
-            expressIN:process.env.REFRESH_TOKEN_EXPIRY
+            expiresIn:process.env.REFRESH_TOKEN_EXPIRY
         }
     )
 }

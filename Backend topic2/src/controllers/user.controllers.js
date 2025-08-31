@@ -14,22 +14,28 @@ const registerUser = asyncHandler(async (req, res) => {
   // remove password and refresh token field from response(because from mongodb as it response will came which we don not want to gave to the user)
   // check for user creation(user is created or not)
   // return response
-  const { fullname, email, username, password } = req.body;
+  const { fullName, email, username, password } = req.body;
   console.log("email:", email);
 
   if (
-    [fullname, email, username, password].some((field) => field?.trim() === "")
+    [fullName, email, username, password].some((field) => field?.trim() === "")
   ) {
     throw new ApiError(400,"All Fields are required")
   }
-  user.findOne({
+  const existedUser = await User.findOne({
     $or:[{username},{email}]
   })
   if(existedUser){
     throw new ApiError(409,"User with email or username already exists")
   }
-  const avatarlocalpath=req.files?.avatar[0]?.path //path is that multer upload on there server
-  const coverimagelocalpath=req.files?.coverimage[0]?.path;
+  // console.log("req.files:", req.files); 
+   const avatarlocalpath = req.files?.avatar?.[0]?.path //path is that multer upload on there server
+  // const coverimagelocalpath = req.files?.coverimage?.[0]?.path
+
+  let coverimagelocalpath;
+  if(req.files && Array.isArray(req.files.coverimage) && req.files.coverimage.length>0){
+    coverimagelocalpath=req.files?.coverimage?.[0]?.path
+  }
 
   if(!avatarlocalpath){
     throw new ApiError(400,"Avatar file is required");
@@ -41,22 +47,22 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   const user=await User.create({
-    fullname,
-    avatar:avatar.url,
+    fullName,
+    avatar:avatar.secure_url,
     coverimage:coverimage?.url || "",
     email,
     password,
     username:username.toLowerCase()
   })
 
-  const createduser=await user.findById(user._id).select("-password -refreshToken") //mongoose is add after every each entry with _id     it also use for user getting        select is used to get those field we did not want
+  const createdUser = await User.findById(user._id).select("-password -refreshToken") //mongoose is add after every each entry with _id     it also use for user getting        select is used to get those field we did not want
 
-  if(!createduser){
+  if(!createdUser){
     throw new ApiError(500,"Something went wrong while registering the user")
   }
 
   return res.status(201).json(
-    new ApiResponse(200,createduser,"User registered succesfully")
+    new ApiResponse(200,createdUser,"User registered succesfully")
   )
 
 });
