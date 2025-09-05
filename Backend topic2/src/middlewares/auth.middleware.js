@@ -3,7 +3,7 @@ import ApiError from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken"
 
-//                      ****verify is there is any user present or not on the basis of the toekn i can verify the user****
+//                      ****verify is there is any user present or not on the basis of the token i can verify the user****
 export const verifyJWT=asyncHandler(async(req,_,next)=>{
     try{
         const token=req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer","")
