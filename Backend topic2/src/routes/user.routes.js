@@ -36,7 +36,7 @@ router
   .patch(verifyJWT, upload.single("avatar"), updateUserAvatar);
 router
   .route("/cover-image")
-  .patch(verifyJWT, upload.single("/coverimage"), updateUserCoverImage);
+  .patch(verifyJWT, upload.single("coverimage"), updateUserCoverImage);
 router.route("/c/:username").get(verifyJWT, getUserChannelProfile); //url that is why get http is using
 router.route("/history").get(verifyJWT, getWatchhistory);
 

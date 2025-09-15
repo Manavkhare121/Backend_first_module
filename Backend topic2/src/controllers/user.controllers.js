@@ -132,27 +132,28 @@ const loginuser = asyncHandler(async (req, res) => {
     secure: true, //modifiable by server are not from frontend
   };
   return res
-    .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
-    .json(
-      new ApiResponse(
-        200,
-        {
-          user: loggedinuser,
-          accessToken,
-          refreshToken, // it is used when user wanted to give it by himself
-        },
-        "User logged in successfully"
-      )
-    );
+  .status(200)
+  .cookie("accessToken", accessToken, options)
+  .cookie("refreshToken", newRefreshToken, options)
+  .json(
+    new ApiResponse(
+      200,
+      {
+        user: loggedinuser,
+        accessToken,
+        refreshToken: newRefreshToken,  
+      },
+      "User logged in successfully"
+    )
+  );
+
 
   //"accessToken and refreshToken main work" is that user should not have to give many time there email and password and accesstoken is short lived i think it should important to refresh access token
 });
 const logoutuser = asyncHandler(async (req, res) => {
   await User.findByIdAndUpdate(
     req.user._id,
-    { $set: { refreshToken: undefined } },
+    { $unset:{refreshToken:1} },
     { new: true }
   );
   const options = { httpOnly: true, secure: true };
@@ -292,6 +293,8 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
   if(!username?.trim){
     throw new ApiError(400,"Username is Missing");
   }
+ 
+
   const channel=await User.aggregate([
     {
       $match:{
@@ -341,8 +344,12 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
 
       }
 
+    
     }
+    
   ])
+  
+
   if(!channel?.length){
   throw new ApiError(404,"channel Does not exists")
  }
@@ -413,3 +420,4 @@ export {
   getUserChannelProfile,
   getWatchhistory
 };
+ 

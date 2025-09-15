@@ -41,6 +41,7 @@ const videoSchema = new Schema(
     timestamps: true,
   }
 );
+
 videoSchema.plugin(mongooseAggregatePaginate) //mongoose-aggregate-paginate-v2 is used as pluggin  
 export const video = mongoose.model("video", videoSchema);   //Bcrypt is a library which helps to hash the passwords and also after ecryption decryption task also perform by this library
 
